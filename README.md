@@ -29,6 +29,8 @@ Frontend (Prettier, lint, TypeScript and build):
 docker compose run --rm web sh -c "npm ci && npm run check"
 ```
 
+GitHub Actions runs the same checks on every push to `main` and on every pull request. The workflow is in `.github/workflows/ci.yml`.
+
 ## How the basket works
 
 The basket is created with three things: the product catalogue, the delivery rules and the offers. It has an `add` method that takes a product code and a `total` method that returns the total.
