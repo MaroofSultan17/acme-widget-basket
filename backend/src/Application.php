@@ -27,9 +27,9 @@ final class Application
         $basketService = new BasketService(
             $storeConfig->productRepository,
             $storeConfig->deliveryRules,
-            $storeConfig->offers,
+            ...$storeConfig->offers,
         );
-        $offerService = new OfferService($storeConfig->offers);
+        $offerService = new OfferService(...$storeConfig->offers);
 
         $router = new Router(
             new ProductController($productService),
