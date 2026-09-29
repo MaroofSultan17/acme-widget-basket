@@ -52,13 +52,15 @@ Prices, delivery rules and offers are all set in `backend/config/store.php`. Mon
 
 ## API
 
-| Method | URL | Send | Get back |
-| --- | --- | --- | --- |
-| GET | `/api/v1/products` | nothing | the list of products |
-| GET | `/api/v1/offers` | nothing | the active offers, shown in the Special offer box on the page |
-| POST | `/api/v1/basket/total` | `{"productCodes": ["R01", "R01"]}` | the lines, subtotal, discount, delivery and total in cents |
+Base URL: `http://localhost:8000/api/v1`
 
-Errors come back as `{"error": "..."}` with a status code: 400 bad JSON, 404 unknown URL, 405 wrong method, 422 bad input, 429 too many requests, 500 server error.
+| Method | Endpoint | Payload | Response |
+| --- | --- | --- | --- |
+| GET | `/products` | None | Array of products with `code`, `name` and `priceInCents` |
+| GET | `/offers` | None | Array of active offers with a `description` |
+| POST | `/basket/total` | `{"productCodes": ["R01", "R01"]}` | Basket `lines`, `subtotalInCents`, `discountInCents`, `deliveryInCents` and `totalInCents` |
+
+Errors are returned as `{"error": "..."}` with one of these status codes: 400 invalid JSON, 404 unknown endpoint, 405 method not allowed, 422 invalid payload, 429 too many requests, 500 server error.
 
 ## Security
 
