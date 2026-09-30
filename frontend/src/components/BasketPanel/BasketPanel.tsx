@@ -1,7 +1,7 @@
 import type { BasketState } from '../../hooks/useBasket'
 import type { BasketSummaryResponseDto } from '../../types/dto'
 import { formatCents } from '../../utils/money'
-import { BasketIcon, CartIcon } from '../icons/icons'
+import { BasketIcon, CartIcon, MinusIcon, PlusIcon } from '../icons/icons'
 import styles from './BasketPanel.module.scss'
 
 type BasketPanelProps = {
@@ -120,7 +120,7 @@ function BasketSummary({
                 onClick={() => onRemoveProduct(line.code)}
                 aria-label={`Remove one ${line.name}`}
               >
-                −
+                <MinusIcon />
               </button>
               <span className={styles.quantity}>{line.quantity}</span>
               <button
@@ -128,7 +128,7 @@ function BasketSummary({
                 onClick={() => onAddProduct(line.code)}
                 aria-label={`Add one ${line.name}`}
               >
-                +
+                <PlusIcon />
               </button>
             </span>
             <span className={styles.lineTotal}>{formatCents(line.lineTotalInCents)}</span>

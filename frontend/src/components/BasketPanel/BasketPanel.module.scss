@@ -113,12 +113,16 @@
     place-items: center;
     width: 26px;
     height: 26px;
+    padding: 0;
     border: 1px solid $color-border;
     border-radius: 50%;
     background: none;
     color: $color-text;
-    font-weight: 700;
-    line-height: 1;
+
+    &:hover {
+      border-color: $color-accent;
+      color: $color-accent;
+    }
   }
 }
 
