@@ -62,7 +62,7 @@ final class RouterTest extends TestCase
 
         self::assertSame(200, $response->status);
         self::assertSame(
-            [['description' => 'Buy one Red Widget, get the second one half price']],
+            [['code' => 'r01-second-half-price', 'description' => 'Buy one Red Widget, get the second one half price']],
             $this->responseBodyOf($response),
         );
     }
