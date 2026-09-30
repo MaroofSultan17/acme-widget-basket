@@ -50,7 +50,7 @@ The total is worked out in this order:
 2. Take away the offer discount.
 3. Add delivery based on what is left: under $50 costs $4.95, under $90 costs $2.95, $90 or more is free.
 
-Prices, delivery rules and offers are all set in `backend/config/store.php`. Money is stored in cents as whole numbers so there are no rounding problems.
+Products and prices are listed in `backend/config/products.php`. To add a product, add one line there. Delivery rules and offers are set in `backend/config/store.php`. Money is stored in cents as whole numbers so there are no rounding problems.
 
 ## Design decisions
 
