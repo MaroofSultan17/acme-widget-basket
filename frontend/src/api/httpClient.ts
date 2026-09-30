@@ -12,6 +12,10 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
+function isErrorResponse(value: unknown): value is ErrorResponseDto {
+  return isRecord(value) && typeof value.error === 'string'
+}
+
 export function unexpectedResponse(): ApiError {
   return new ApiError('The server sent an unexpected response.')
 }
@@ -32,9 +36,9 @@ async function readErrorMessage(response: Response): Promise<string> {
     return `Too many requests. Please try again in ${retryAfterSeconds} ${unit}.`
   }
 
-  const errorResponse: Partial<ErrorResponseDto> = await response.json().catch(() => ({}))
+  const errorResponse: unknown = await response.json().catch(() => null)
 
-  if (errorResponse.error) {
+  if (isErrorResponse(errorResponse)) {
     return errorResponse.error
   }
 

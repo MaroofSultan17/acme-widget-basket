@@ -14,7 +14,7 @@ use Psr\Log\LogLevel;
 
 final readonly class Router
 {
-    public const string PREFIX = '/api/v1';
+    private const string PREFIX = '/api/v1';
 
     public function __construct(
         private ProductController $productController,

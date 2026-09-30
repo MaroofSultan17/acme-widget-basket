@@ -22,7 +22,7 @@ export type UseBasketResult = {
   clearBasket: () => void
 }
 
-export const MAX_BASKET_ITEMS = 100
+const MAX_BASKET_ITEMS = 100
 
 const emptyBasket: BasketState = { productCodes: [], summaryResponse: null, errorMessage: null }
 

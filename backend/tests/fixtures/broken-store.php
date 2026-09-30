@@ -2,4 +2,4 @@
 
 declare(strict_types=1);
 
-return 'database password is hunter2';
+throw new RuntimeException('internal detail: /var/secret/path');

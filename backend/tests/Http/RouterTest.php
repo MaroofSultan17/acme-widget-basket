@@ -47,8 +47,7 @@ final class RouterTest extends TestCase
     /** @return array<mixed> */
     private function responseBodyOf(JsonResponse $response): array
     {
-        $responseJson = json_encode($response->body, JSON_THROW_ON_ERROR);
-        $responseBody = json_decode($responseJson, true, flags: JSON_THROW_ON_ERROR);
+        $responseBody = json_decode($response->json, true, flags: JSON_THROW_ON_ERROR);
         self::assertIsArray($responseBody);
 
         return $responseBody;

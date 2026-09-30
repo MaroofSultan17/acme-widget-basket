@@ -88,8 +88,8 @@ Errors are returned as `{"error": "..."}` with one of these status codes: 400 in
 ## Security
 
 * The frontend only sends product codes. The backend looks up every price and does all the maths, so a fake price sent from Postman is ignored.
-* Each product code must be 1 to 32 letters or numbers and a basket can have at most 100 items.
-* Each client can send 25 basket requests per minute. Only requests to a real POST route count, so a wrong URL gets a 404 without using up the limit. After that the API returns 429 with a `Retry-After` header, and the page tells the user how long to wait. Reading products and offers is not limited. The limit can be changed with `RATE_LIMIT_PER_MINUTE`. Docker Compose sets it to 300 because every browser request goes through the Vite dev server and so shares one limit.
+* Each product code must be 1 to 32 letters or numbers and a basket can have at most 100 items. The page keeps its own copy of the 100 item limit so it can disable the add buttons in time. The two numbers are kept in sync by hand.
+* Each client can send 25 basket requests per minute. After that the API returns 429 with a `Retry-After` header, and the page tells the user how long to wait. Only requests to a real POST route count, so a wrong URL gets a 404 without using up the limit. Reading products and offers is not limited. The limit can be changed with `RATE_LIMIT_PER_MINUTE`. Docker Compose sets it to 300 because every browser request goes through the Vite dev server and so shares one limit.
 * A POST body must be sent as `application/json`.
 * Every response has `X-Content-Type-Options: nosniff` and `Cache-Control: no-store`.
 * Errors and blocked requests are logged as JSON with Monolog. See them with `docker compose logs api`. Client IP addresses are logged as a short SHA256 hash, not in plain text. This is pseudonymised, not anonymous: every IPv4 address can be hashed in minutes, so the hash can be reversed. In production I would use an HMAC with a secret key.

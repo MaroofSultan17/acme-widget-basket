@@ -54,7 +54,7 @@ final class ApplicationTest extends TestCase
         $response = $application->handle($server, '{"productCodes":["R01","R01"]}');
 
         self::assertSame(200, $response->status);
-        self::assertStringContainsString('"totalInCents":5437', json_encode($response->body, JSON_THROW_ON_ERROR));
+        self::assertStringContainsString('"totalInCents":5437', $response->json);
         $this->assertStandardHeaders($response);
     }
 
@@ -75,10 +75,10 @@ final class ApplicationTest extends TestCase
         $application = $this->applicationWith(__DIR__ . '/fixtures/broken-store.php', new Logger('test', [$logRecords]));
 
         $response = $application->handle(['REQUEST_METHOD' => 'GET', 'REQUEST_URI' => '/api/v1/products'], '');
-        $responseJson = json_encode($response->body, JSON_THROW_ON_ERROR);
 
         self::assertSame(500, $response->status);
-        self::assertSame('{"error":"Internal server error."}', $responseJson);
+        self::assertSame('{"error":"Internal server error."}', $response->json);
+        self::assertStringNotContainsString('internal detail', $response->json);
         self::assertTrue($logRecords->hasErrorThatContains('Unhandled exception'));
         $this->assertStandardHeaders($response);
     }

@@ -31,12 +31,14 @@ final class HttpException extends RuntimeException
     public static function methodNotAllowed(array $allowedMethods): self
     {
         $headers = ['Allow' => implode(', ', $allowedMethods)];
+
         return new self(405, 'Method not allowed.', $headers);
     }
 
     public static function tooManyRequests(int $retryAfterSeconds): self
     {
         $headers = ['Retry-After' => (string) $retryAfterSeconds];
+
         return new self(429, 'Too many requests. Please slow down.', $headers);
     }
 

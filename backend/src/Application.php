@@ -23,7 +23,7 @@ use Throwable;
 
 final readonly class Application
 {
-    public const int DEFAULT_REQUESTS_PER_MINUTE = 25;
+    private const int DEFAULT_REQUESTS_PER_MINUTE = 25;
 
     private const array STANDARD_HEADERS = [
         'Content-Type' => 'application/json',
@@ -78,7 +78,7 @@ final readonly class Application
             header("{$name}: {$value}");
         }
 
-        echo json_encode($response->body, JSON_THROW_ON_ERROR);
+        echo $response->json;
     }
 
     public static function createRouter(StoreConfig $storeConfig, RateLimiter $rateLimiter, LoggerInterface $logger): Router
