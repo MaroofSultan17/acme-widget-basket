@@ -10,6 +10,7 @@ use InvalidArgumentException;
 
 final class InMemoryProductRepository implements ProductRepository
 {
+    /** @var array<string, Product> */
     private array $productsByCode = [];
 
     public function __construct(Product ...$products)
@@ -23,6 +24,7 @@ final class InMemoryProductRepository implements ProductRepository
         }
     }
 
+    /** @return list<Product> */
     public function findAll(): array
     {
         $products = array_values($this->productsByCode);
