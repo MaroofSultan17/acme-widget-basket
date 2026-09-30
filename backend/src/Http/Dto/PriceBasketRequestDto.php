@@ -43,8 +43,6 @@ final readonly class PriceBasketRequestDto
             $productCodes[] = $rawCode;
         }
 
-        $requestDto = new self($productCodes);
-
-        return $requestDto;
+        return new self($productCodes);
     }
 }

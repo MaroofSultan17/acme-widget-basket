@@ -47,9 +47,7 @@ final readonly class FileRateLimiter implements RateLimiter
             }
 
             $windowEndsAt = $windowStartedAt + $this->windowSeconds;
-            $retryAfterSeconds = $windowEndsAt - $now;
-
-            return $retryAfterSeconds;
+            return $windowEndsAt - $now;
         } finally {
             $counterFile->flock(LOCK_UN);
         }
@@ -66,9 +64,7 @@ final readonly class FileRateLimiter implements RateLimiter
         }
 
         $path = $this->storageDirectory . '/' . hash('sha256', $clientKey);
-        $counterFile = new SplFileObject($path, 'c+');
-
-        return $counterFile;
+        return new SplFileObject($path, 'c+');
     }
 
     /** @return array{int, int} */
@@ -80,9 +76,7 @@ final readonly class FileRateLimiter implements RateLimiter
 
         $windowStartedAt = (int) $counterParts[0];
         $requestCount = (int) ($counterParts[1] ?? 0);
-        $counter = [$windowStartedAt, $requestCount];
-
-        return $counter;
+        return [$windowStartedAt, $requestCount];
     }
 
     private function writeCounter(SplFileObject $counterFile, int $windowStartedAt, int $requestCount): void

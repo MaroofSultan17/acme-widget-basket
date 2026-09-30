@@ -23,8 +23,6 @@ final readonly class JsonResponse
     {
         $errorDto = new ErrorResponseDto($message);
 
-        $response = new self($status, $errorDto, $headers);
-
-        return $response;
+        return new self($status, $errorDto, $headers);
     }
 }
