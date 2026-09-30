@@ -8,6 +8,7 @@ use Acme\Domain\Basket;
 
 final readonly class BasketSummaryResponseDto
 {
+    /** @param list<BasketLineResponseDto> $lines */
     public function __construct(
         public array $lines,
         public int $subtotalInCents,
@@ -23,12 +24,14 @@ final readonly class BasketSummaryResponseDto
             $lineDtos[] = BasketLineResponseDto::fromBasketLine($line);
         }
 
+        $priceBreakdown = $basket->priceBreakdown();
+
         $summaryDto = new self(
             lines: $lineDtos,
-            subtotalInCents: $basket->subtotal(),
-            discountInCents: $basket->discount(),
-            deliveryInCents: $basket->delivery(),
-            totalInCents: $basket->total(),
+            subtotalInCents: $priceBreakdown->subtotalInCents,
+            discountInCents: $priceBreakdown->discountInCents,
+            deliveryInCents: $priceBreakdown->deliveryInCents,
+            totalInCents: $priceBreakdown->totalInCents,
         );
 
         return $summaryDto;

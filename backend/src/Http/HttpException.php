@@ -8,6 +8,7 @@ use RuntimeException;
 
 final class HttpException extends RuntimeException
 {
+    /** @param array<string, string> $headers */
     public function __construct(
         public readonly int $status,
         string $message,
@@ -30,6 +31,7 @@ final class HttpException extends RuntimeException
         return $exception;
     }
 
+    /** @param list<string> $allowedMethods */
     public static function methodNotAllowed(array $allowedMethods): self
     {
         $headers = ['Allow' => implode(', ', $allowedMethods)];
@@ -42,6 +44,13 @@ final class HttpException extends RuntimeException
     {
         $headers = ['Retry-After' => (string) $retryAfterSeconds];
         $exception = new self(429, 'Too many requests. Please slow down.', $headers);
+
+        return $exception;
+    }
+
+    public static function unsupportedMediaType(): self
+    {
+        $exception = new self(415, 'Request body must be sent as application/json.');
 
         return $exception;
     }

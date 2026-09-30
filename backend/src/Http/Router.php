@@ -8,6 +8,7 @@ use Acme\Http\Controller\BasketController;
 use Acme\Http\Controller\OfferController;
 use Acme\Http\Controller\ProductController;
 use Acme\Http\RateLimit\RateLimiter;
+use Closure;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -26,9 +27,8 @@ final readonly class Router
     public function handle(Request $request): JsonResponse
     {
         try {
-            $retryAfterSeconds = $this->rateLimiter->hit($request->clientIp);
-            if ($retryAfterSeconds > 0) {
-                throw HttpException::tooManyRequests($retryAfterSeconds);
+            if ($request->method === 'POST') {
+                $this->guardPostRequest($request);
             }
 
             $route = $this->routeOf($request->path);
@@ -55,6 +55,19 @@ final readonly class Router
         return $response;
     }
 
+    private function guardPostRequest(Request $request): void
+    {
+        $retryAfterSeconds = $this->rateLimiter->hit($request->clientIp);
+        if ($retryAfterSeconds > 0) {
+            throw HttpException::tooManyRequests($retryAfterSeconds);
+        }
+
+        $mediaType = strtolower(trim(explode(';', $request->contentType)[0]));
+        if ($mediaType !== 'application/json') {
+            throw HttpException::unsupportedMediaType();
+        }
+    }
+
     private function logRejectedRequest(Request $request, HttpException $exception): void
     {
         $level = $exception->status === 429 ? LogLevel::WARNING : LogLevel::NOTICE;
@@ -64,10 +77,11 @@ final readonly class Router
             'path' => $request->path,
             'status' => $exception->status,
             'reason' => $exception->getMessage(),
-            'clientIp' => $request->clientIp,
+            'clientHash' => substr(hash('sha256', $request->clientIp), 0, 12),
         ]);
     }
 
+    /** @return array<string, array<string, Closure(Request): JsonResponse>> */
     private function routes(): array
     {
         $routes = [

@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 final class DeliveryRulesTest extends TestCase
 {
+    /** @return iterable<string, array{int, int}> */
     public static function bandBoundaries(): iterable
     {
         yield 'just under $50' => [4999, 495];
@@ -39,6 +40,16 @@ final class DeliveryRulesTest extends TestCase
         );
 
         self::assertSame(495, $rules->chargeFor(1000));
+    }
+
+    public function testDuplicateThresholdsAreRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new DeliveryRules(
+            new DeliveryTier(spendBelowInCents: 5000, chargeInCents: 495),
+            new DeliveryTier(spendBelowInCents: 5000, chargeInCents: 295),
+        );
     }
 
     public function testNegativeChargeIsRejected(): void
